@@ -1,0 +1,27 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block title %}restaurant{% endblock %}
+{% block body %}
+<div class="intro-head">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                    <h1>restaurant</h1>
+                    <div class="center">
+                        <br/>
+                        {% if restaurant %}
+                        <div class="alert alert-primary" role="alert">
+                           <h1>{{ restaurant.nom }}</h1>
+                           <p>Adresse : {{ restaurant.adresse }}</p>
+                           <p>Numero de telephone : {{ restaurant.telephone }}</p>
+                        </div> 
+                        {% endif %}
+                    </div>
+                    
+                    <hr >
+                    </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
