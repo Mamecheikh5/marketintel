@@ -67,6 +67,7 @@ class restaurants(db.Model):
     adresse=db.Column(db.String(300))
     pays=db.Column(db.String(200))
     telephone=db.Column(db.String(200))
+    region=db.Column(db.String(200))
 
     def __repr__(self):
         return '<Restaurants: {}>'.format(self.nom)
