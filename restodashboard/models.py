@@ -3,7 +3,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from app import db, login_manager
+from restodashboard import db, login_manager
 
 
 class Employee(UserMixin, db.Model):
@@ -13,14 +13,14 @@ class Employee(UserMixin, db.Model):
 
     # Ensures table will be named in plural and not in singular
     # as is the name of the model
-    __tablename__ = 'employees'
+    __tablename__ = 'resto_employee'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), index=True, unique=True)
     username = db.Column(db.String(60), index=True, unique=True)
     first_name = db.Column(db.String(60), index=True)
     last_name = db.Column(db.String(60), index=True)
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(228))
     is_admin = db.Column(db.Boolean, default=False)
 
     @property
@@ -59,7 +59,7 @@ class restaurants(db.Model):
     Create a Restaurant table
     """
 
-    __tablename__ = 'restaurants'
+    __tablename__ = 'resto_restaurants'
     
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(60), unique=True)

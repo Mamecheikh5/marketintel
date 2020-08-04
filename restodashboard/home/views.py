@@ -108,11 +108,11 @@ def donnee():
     
     Koudougou=restaurants.query.filter_by(region='Koudougou').count()
     Bobo=restaurants.query.filter_by(region='Bobo-Dioulasso').count()
-    ouagadougou=restaurants.query.filter_by(region='ouagadougou').count()
+    ouagadougou=restaurants.query.filter_by(region='Ouagadougou').count()
     burkina=[ouagadougou,Bobo,Koudougou]
 
     
-    lome=restaurants.query.filter_by(region='lomé').count()
+    lome=restaurants.query.filter_by(region='Lomé').count()
     Atakpame=restaurants.query.filter_by(region='Atakpamé').count()
     Kpalime=restaurants.query.filter_by(region='Kpalimé').count()
     togo=[lome,Atakpame,Kpalime]
@@ -125,10 +125,10 @@ def donnee():
 def Max():
     Dakar = restaurants.query.filter_by(region='Dakar').count()
     Ouagadougou = restaurants.query.filter_by(region='Ouagadougou').count()
-    Lome= restaurants.query.filter_by(region="lomé").count()
+    Lome= restaurants.query.filter_by(region="Lomé").count()
     Abidjan = restaurants.query.filter_by(region='Abidjan').count()
     Cotonou = restaurants.query.filter_by(region='Cotonou').count()
-    nombres=[Dakar,Ouagadougou,Lome,Abidjan,Cotonou]
+    nombres=[Dakar,Lome,Ouagadougou,Abidjan,Cotonou]
     return render_template('home/capitale.html', title="Statistiques" ,nombres=nombres )
     
     
