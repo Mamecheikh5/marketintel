@@ -1,0 +1,64 @@
+{% extends 'immodashboard/base.html' %}
+{% block content %}
+    <h1>Welcome to my Dashboard</h1>
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered dataTable" id="dataTable" width="100%" cellspacing="0" role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+              <thead>
+                <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 195px;">Type</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 294px;">Ville</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 142px;">Pays</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 66px;">Intitulé</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 131px;">Prix</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 121px;">Devise</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 121px;">Vendeur</th><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" aria-label="Salary: activate to sort column ascending" style="width: 121px;">Date</th></tr>
+              </thead>
+              <tfoot>
+                <tr><th rowspan="1" colspan="1">Type</th><th rowspan="1" colspan="1">Ville</th><th rowspan="1" colspan="1">Pays</th><th rowspan="1" colspan="1">Intitulé</th><th rowspan="1" colspan="1">Prix</th><th rowspan="1" colspan="1">Devise</th><th rowspan="1" colspan="1">Vendeur</th><th rowspan="1" colspan="1">Date</th></tr>
+              </tfoot>
+              <tbody>
+                  {% for offre in offres %}
+                <tr role="row" class="odd">
+                    <td class="sorting_1">{{ offre.type }}</td>
+                    <td>{{ offre.city }}</td>
+                    <td>{{ offre.country }}</td>
+                    <td>{{ offre.intitule }}</td>
+                    <td>{{ offre.price }}</td>
+                    <td>{{ offre.monnaie }}</td>
+                    <td>{{ offre.seller }}</td>
+                    <td>{{ offre.date }}</td>
+
+                    </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-5">
+            </div>
+            <div class="col-sm-12 col-md-7">
+                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
+                    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+        </div>
+    
+
+        
+    <!-- Bootstrap core JavaScript-->
+  
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
+
+</script>
+
+{% endblock %}

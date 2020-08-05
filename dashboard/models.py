@@ -3,7 +3,7 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from restodashboard import db, login_manager
+from dashboard import db, login_manager
 
 
 class Employee(UserMixin, db.Model):
@@ -13,7 +13,7 @@ class Employee(UserMixin, db.Model):
 
     # Ensures table will be named in plural and not in singular
     # as is the name of the model
-    __tablename__ = 'resto_employee'
+    __tablename__ = 'employee'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), index=True, unique=True)
@@ -59,10 +59,10 @@ class restaurants(db.Model):
     Create a Restaurant table
     """
 
-    __tablename__ = 'resto_restaurants'
-
+    __tablename__ = 'restaurants'
+    
     id = db.Column(db.Integer, primary_key=True)
-    nom = db.Column(db.String(60), unique=True)
+    nom = db.Column(db.String(60))
     description = db.Column(db.String(200))
     adresse=db.Column(db.String(300))
     pays=db.Column(db.String(200))
@@ -73,12 +73,13 @@ class restaurants(db.Model):
         return '<Restaurants: {}>'.format(self.nom)
 
 
+
 class Car(db.Model):
     """
     Create a Role table
     """
 
-    __tablename__ = 'cars'
+    _tablename_ = 'cars'
 
     id = db.Column(db.Integer, primary_key=True)
     vendeur = db.Column(db.String(60))
@@ -92,7 +93,62 @@ class Car(db.Model):
     transmission=db.Column(db.String(60))
     prix=db.Column(db.Float)
     vendeur=db.Column(db.String(60))
+    
+    
+    def _repr_(self):
+        return '<Car: {}>'.format(self.vendeur)
 
+class Immobilier(db.Model):
+    _tablename_ = 'immobilier'
+
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String)
+    city = db.Column(db.String)
+    country = db.Column(db.String)
+    intitule = db.Column(db.String)
+    price = db.Column(db.Integer)
+    monnaie = db.Column(db.String)
+    seller = db.Column(db.String)
+    date = db.Column(db.String)
+    surface = db.Column(db.Integer)
+    chambre = db.Column(db.Integer)
+
+class Offre(db.Model):
+
+    """
+    Create an Offre table
+    """
+
+    # Ensures table will be named in plural and not in singular
+    # as is the name of the model
+    __tablename__ = 'offres'
+
+    intitule = db.Column(db.Text())
+    description = db.Column(db.Text())
+    secteur = db.Column(db.Text())
+    salaire = db.Column(db.Text())
+    typeContrat = db.Column(db.Text())
+    experience = db.Column(db.Text())
+    niveau = db.Column(db.Text())
+    entreprise = db.Column(db.Text())
+    lieu = db.Column(db.Text())
+    pays = db.Column(db.Text())
+    date = db.Column(db.Text())
+    lien = db.Column(db.Text(),primary_key=True)
+
+    def __init__(self,intitule,description,secteur,salaire,typeContrat,experience,niveau,entreprise,date,lieu,pays,lien):
+        self.intitule = intitule
+        self.description = description
+        self.secteur = secteur
+        self.salaire = salaire
+        self.typeContrat = typeContrat
+        self.experience = experience
+        self.niveau = niveau
+        self.entreprise = entreprise
+        self.date = date
+        self.lieu = lieu
+        self.pays = pays
+        self.lien = lien
 
     def __repr__(self):
-        return '<Car: {}>'.format(self.vendeur)
+        return '<lien {}>'.format(self.lien)

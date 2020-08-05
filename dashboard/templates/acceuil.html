@@ -1,0 +1,68 @@
+{% import "bootstrap/wtf.html" as wtf %}
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<h1> Bienvenue à l'accueil !</h1>
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <a href="/emploi/md">
+                        <div class="card bg-primary text-white shadow">
+                            <div class="card-body">
+                                Emplois
+                                <div class="text-white-50 small">Offres d'emplois</div>
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            
+                        </div>
+                        
+                    </a>
+                  </div>
+    
+                  
+                <div class="col-lg-6 mb-4">
+                    <a href="{{ url_for('immodashboard.immodashboard') }}">
+                        <div class="card bg-info text-white shadow">
+                            <div class="card-body">
+                            Immobiliers
+                                <div class="text-white-50 small">Offres Immobilières</div>
+                                <i class="fas fa-building"></i>
+                            </div>
+                            
+                        </div>
+                        
+                    </a>
+                </div>
+               
+    
+                  <div class="col-lg-6 mb-4">
+                    <a href="{{ url_for('dashboard_cars.dashboard') }}">
+                        <div class="card bg-info text-white shadow">
+                            <div class="card-body">
+                                Voitures
+                                <div class="text-white-50 small">Offres de voitures</div>
+                                <i class="fas fa-car"></i>
+                            </div>
+                            
+                        </div>
+                        
+                    </a>
+                  </div>
+    
+                  <div class="col-lg-6 mb-4">
+                    <a href="{{ url_for('restaudashboard.dashboard') }}">
+                        <div class="card bg-primary text-white shadow">
+                            <div class="card-body">
+                                Restaurants
+                                <div class="text-white-50 small">Entreprises restauration</div>
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            
+                        </div>
+                        
+                    </a>
+                  </div>
+            </div>
+        </div>
+    
+{% endblock %}

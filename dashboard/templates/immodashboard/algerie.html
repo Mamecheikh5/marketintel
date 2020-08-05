@@ -1,0 +1,285 @@
+{% extends 'immodashboard/base.html' %}
+
+{% block content %}
+    <h1>Hello Algérie</h1>
+    
+<div class="row">
+    <div class="col-xl-8 col-lg-7">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Diagramme en ligne</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-area">
+                  <div class="chartjs-size-monitor">
+                      <div class="chartjs-size-monitor-expand">
+                          <div class="">
+
+                          </div>
+                        </div
+                        ><div class="chartjs-size-monitor-shrink">
+                            <div class="">
+
+                            </div>
+                        </div>
+                    </div>
+                <canvas id="LineChart" style="display: block; height: 320px; width: 782px;" width="977" height="400" class="chartjs-render-monitor"></canvas>
+              </div>
+              <hr>
+              Pour connaitre le prix moyen d'un logement par ville, veuillez consulter le diagramme ci-dessus.
+            </div>
+          </div>
+
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Diagramme en barre</h6>
+            </div>
+            <div class="card-body">
+              <div class="chart-bar"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+                <canvas id="BarChart" width="492" height="400" class="chartjs-render-monitor" style="display: block; height: 320px; width: 394px;"></canvas>
+              </div>
+              <hr>
+              Ceci est un diagramme de bar dynamique et interactif qui affiche les prix maximal et minimal d'un loyer par ville/quartier. 
+            </div>
+          </div>
+        </div>
+
+    <div class="col-xl-4 col-lg-5">
+        <div class="col-xl-12 col-md-12 mb-12" style="margin-bottom: 5% ;">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Plus haut prix de location</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ max[1] }}</div>
+                    <p>{{ max[0] }}</p>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-12 col-md-12 mb-12" style="margin-bottom: 5% ;">
+            <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-2">
+                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Plus bas prix de location</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ min[1] }}</div>
+                    <p>{{ min[0] }}</p>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="col-xl-12 col-lg-12">
+          <div class="card shadow mb-6">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Diagramme Circulaire/Donut</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+              <div class="chart-pie pt-4">
+                <canvas id="PieChart"></canvas>
+              </div>
+              <hr>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+   
+<script>
+
+function generateRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+
+  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#858796';
+  // Pie Chart Example
+  var ctx = document.getElementById("PieChart");
+  var colors = []
+  var labels = {{ labels|safe }}
+  for (var label in labels){
+      colors.push(generateRandomColor())
+  }
+  var myPieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: {{ datas|safe }},
+        backgroundColor: colors,
+        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+        hoverBorderColor: "rgba(234, 236, 244, 1)",
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false
+      },
+      cutoutPercentage: 80,
+    },
+  });
+
+
+
+
+        var barChartData = {
+            labels: {{ labels|safe }},
+			datasets: [{
+				label: 'Max Price',
+				backgroundColor: "#e74a3b",
+				stack: 'Stack 0',
+				data: {{ max_price|safe }}
+			}, {
+				label: 'Min Price',
+				backgroundColor: "#f6c23e",
+				stack: 'Stack 1',
+				data: {{ min_price|safe }}
+			}]
+
+		};
+		window.onload = function() {
+            var ctx1 = document.getElementById('LineChart').getContext('2d');
+			window.myLine = new Chart(ctx1, config);
+			var ctx2 = document.getElementById('BarChart').getContext('2d');
+			window.myBar = new Chart(ctx2, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 10,
+              right: 25,
+              top: 25,
+              bottom: 0
+            }
+          },
+					tooltips: {
+						mode: 'index',
+            intersect: false,
+            titleMarginBottom: 10,
+            titleFontColor: '#6e707e',
+            titleFontSize: 14,
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            caretPadding: 10,
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+              stacked: true,
+              time: {
+                unit: 'city'
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false
+              },
+              ticks: {
+                
+              },
+              maxBarThickness: 25,
+						}],
+						yAxes: [{
+              stacked: true,
+              ticks: {
+              min: 0,
+              maxTicksLimit: 10,
+              padding: 10
+              }
+						}]
+					}
+				}
+			});
+        };
+        
+
+
+        var CITIES = {{ avg_labels|safe }};
+		var config = {
+			type: 'line',
+			data: {
+				labels: CITIES,
+				datasets: [{
+					backgroundColor: "#36b9cc",
+					borderColor: "#36b9cc",
+					data: {{ average }},
+					fill: false,
+				}]
+			},
+			options: {
+                maintainAspectRatio: false,
+                legend:{
+                    display:false
+                },
+				responsive: true,
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Cities'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'DA'
+						}
+					}]
+				}
+			}
+		};
+
+		
+
+
+        
+		
+
+	
+
+</script>
+    
+{% endblock %}

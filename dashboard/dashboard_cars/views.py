@@ -14,16 +14,9 @@ from sqlalchemy import asc, desc
 from . import dashboard_cars
 
 
-@dashboard_cars.route('/',)
-def dashboard_carspage():
-    """
-    Render the homepage template on the / route
-    """
-    return render_template('dashboard_cars/startbootstrap-sb-admin-2-master/blank.html', title="Welcome" )
 
 
-@dashboard_cars.route('/dashboard_cars', methods=['GET', 'POST'])
-
+@dashboard_cars.route('/cars/dashboard_cars', methods=['GET', 'POST'])
 def dashboard():
 
     """
@@ -48,7 +41,6 @@ def dashboard():
             pays="Côte d'Ivoire"
         if request.form.get("Togo") is not None:
             pays="Togo"
-
 
         #suivant le filtre sur le type de transmission
 

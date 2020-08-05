@@ -1,17 +1,21 @@
 # app/__init__.py
 
 # third-party imports
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+import os
+from flask import Flask
+from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+from flask import Flask, render_template
+
 # local imports
 from config import app_config
-from flask_bootstrap import Bootstrap
-import os
-# db variable initialization
+
 db = SQLAlchemy()
 login_manager = LoginManager()
+
 
 
 def create_app(config_name):
@@ -27,30 +31,36 @@ def create_app(config_name):
         app.config.from_pyfile('config.py')
 
     app = Flask(__name__, instance_relative_config=True)
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
 
     Bootstrap(app)
     db.init_app(app)
-
-
     login_manager.init_app(app)
     login_manager.login_message = "You must be logged in to access this page."
     login_manager.login_view = "auth.login"
-
     migrate = Migrate(app, db)
 
-    from app import models
+    from dashboard import models
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
+    from .restaudashboard import home as home_blueprint
+    app.register_blueprint(home_blueprint)
+    from .dashboard_cars import dashboard_cars as cars_blueprint
+    app.register_blueprint(cars_blueprint)
+  
+    from .immodashboard import defimobilier as immo_blueprint
+    app.register_blueprint(immo_blueprint)
+    from .emploisdashboard import home as emploi_blueprint
+    app.register_blueprint(emploi_blueprint)
+  
+    from .acceuil import acceuil as acceuil_blueprint
+    app.register_blueprint(acceuil_blueprint)
 
-    from .restodashboard import restodashboard as restodashboard_blueprint
-    app.register_blueprint(restodashboard_blueprint)
 
-    from .dashboard_cars import dashboard_cars as dashboard_cars_blueprint
-    app.register_blueprint(dashboard_cars_blueprint)
-
+    
     @app.errorhandler(403)
     def forbidden(error):
         return render_template('errors/403.html', title='Forbidden'), 403
@@ -66,5 +76,6 @@ def create_app(config_name):
     @app.route('/500')
     def error():
         abort(500)
+
 
     return app

@@ -1,0 +1,178 @@
+{% extends 'immodashboard/base.html' %}
+
+{% block content %}
+    <h1>Hello Caméroun</h1>
+    
+<div class="row">
+      <div class="col-8">
+          <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-6">
+              <!-- Card Header - Dropdown -->
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Diagramme en barre</h6>
+              </div>
+              <!-- Card Body -->
+              <div class="card-body">
+                <div class="chart-pie pt-4">
+                  <canvas id="BarChart"></canvas>
+                </div>
+                <hr>
+                Ceci est un diagramme de bar dynamique et interactif qui affiche les prix maximal et minimal d'un loyer par ville/quartier. 
+            </div>
+            </div>
+          </div>
+      </div>
+      <div class="col-4">
+        <div class="col-xl-12 col-lg-12">
+          <div class="card shadow mb-6">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Diagramme en ligne</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+              <div class="chart-pie pt-4">
+                <canvas id="PieChart"></canvas>
+              </div>
+              <hr>
+              Pour connaitre le prix moyen d'un logement par ville, veuillez consulter le diagramme ci-dessus.
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js" integrity="sha512-G8JE1Xbr0egZE5gNGyUm1fF764iHVfRXshIoUWCTPAbKkkItp/6qal5YAHXrxEu4HNfPTQs6HOu3D5vCGS1j3w==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha512-vBmx0N/uQOXznm/Nbkp7h0P1RfLSj0HQrFSzV8m7rOGyj30fYAOKHYvCNez+yM8IrfnW0TCodDEjRqf6fodf/Q==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js" integrity="sha512-QEiC894KVkN9Tsoi6+mKf8HaCLJvyA6QIRzY5KrfINXYuP9NxdIkRQhGq3BZi0J4I7V5SidGM3XUQ5wFiMDuWg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha512-s+xg36jbIujB2S2VKfpGmlC3T5V2TF3lY48DX7u2r9XzGzgPsa6wTpOQA7J9iffvdeBN0q9tKzRxVxw1JviZPg==" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    
+<script>
+    function generateRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
+  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+  Chart.defaults.global.defaultFontColor = '#858796';
+  // Pie Chart Example
+  var ctx = document.getElementById("PieChart");
+  var colors = []
+  var labels = {{ labels|safe }}
+  for (var label in labels){
+      colors.push(generateRandomColor())
+  }
+  var myPieChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        data: {{ datas|safe }},
+        backgroundColor: colors,
+        hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+        hoverBorderColor: "rgba(234, 236, 244, 1)",
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false
+      },
+      cutoutPercentage: 80,
+    },
+  });
+
+
+
+
+  var barChartData = {
+      labels: {{ labels|safe }},
+			datasets: [{
+				label: 'Max Price',
+				backgroundColor: "#e74a3b",
+				stack: 'Stack 0',
+				data: {{ max_price|safe }}
+			}, {
+				label: 'Min Price',
+				backgroundColor: "#f6c23e",
+				stack: 'Stack 1',
+				data: {{ min_price|safe }}
+			}]
+
+		};
+		window.onload = function() {
+			var ctx = document.getElementById('BarChart').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+          maintainAspectRatio: false,
+          layout: {
+            padding: {
+              left: 10,
+              right: 25,
+              top: 25,
+              bottom: 0
+            }
+          },
+					tooltips: {
+						mode: 'index',
+            intersect: false,
+            titleMarginBottom: 10,
+            titleFontColor: '#6e707e',
+            titleFontSize: 14,
+            backgroundColor: "rgb(255,255,255)",
+            bodyFontColor: "#858796",
+            borderColor: '#dddfeb',
+            borderWidth: 1,
+            xPadding: 15,
+            yPadding: 15,
+            displayColors: false,
+            caretPadding: 10,
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+              stacked: true,
+              time: {
+                unit: 'Ville/quartier'
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false
+              },
+              ticks: {
+                
+              },
+              maxBarThickness: 25,
+						}],
+						yAxes: [{
+              stacked: true,
+              ticks: {
+              min: 0,
+              maxTicksLimit: 10,
+              padding: 10
+              }
+						}]
+					}
+				}
+			});
+		};
+
+</script>
+
+{% endblock %}
